@@ -7,7 +7,7 @@ import com.seungbeom.kbo.standings.StandingsService
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 import java.time.ZoneId
-import com.seungbeom.kbo.team.League
+import com.seungbeom.kbo.league.League
 
 /**
  * 계산된 순위(승률)와 선발 등판 이력을 읽어 승리확률을 낸다.

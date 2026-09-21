@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import java.time.LocalDate
-import com.seungbeom.kbo.team.League
+import com.seungbeom.kbo.league.League
 
 @RestController
 @RequestMapping("/api")

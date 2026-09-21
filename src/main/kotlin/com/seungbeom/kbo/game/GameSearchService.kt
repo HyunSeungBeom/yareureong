@@ -3,7 +3,7 @@ package com.seungbeom.kbo.game
 import com.seungbeom.kbo.team.TeamRepository
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
-import com.seungbeom.kbo.team.League
+import com.seungbeom.kbo.league.League
 
 class InvalidGameFilterException(val errors: List<String>) :
     IllegalArgumentException(errors.joinToString("; "))

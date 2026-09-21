@@ -5,7 +5,7 @@ import com.seungbeom.kbo.game.GameStatus
 import com.seungbeom.kbo.standings.StandingsService
 import org.springframework.stereotype.Service
 import kotlin.random.Random
-import com.seungbeom.kbo.team.League
+import com.seungbeom.kbo.league.League
 
 /**
  * 현재 순위 + 남은 경기로 시즌을 몬테카를로 시뮬레이션한다.

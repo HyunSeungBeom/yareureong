@@ -1,7 +1,8 @@
 package com.seungbeom.kbo.ingest
 
 import com.seungbeom.kbo.game.GameStatus
-import com.seungbeom.kbo.team.League
+import com.seungbeom.kbo.game.Round
+import com.seungbeom.kbo.league.League
 import java.time.LocalDate
 import java.time.YearMonth
 import kotlin.test.Test
@@ -48,7 +49,7 @@ class NaverAsianGamesSourceTest {
         assertNull(g.awayScore)
         assertEquals("18:30", g.startTime)
         assertEquals("오카자키", g.stadium)
-        assertEquals(Rounds.GROUP, g.round)
+        assertEquals(Round.GROUP, g.round)
     }
 
     @Test
@@ -66,7 +67,7 @@ class NaverAsianGamesSourceTest {
         val schedule = parsed()
 
         // A1 vs B2(결승) · A3 vs B3(순위결정전) 은 아직 «팀» 이 아니다.
-        assertTrue(schedule.games.none { it.round == Rounds.FINAL || it.round == Rounds.PLACEMENT })
+        assertTrue(schedule.games.none { it.round == Round.FINAL || it.round == Round.PLACEMENT })
         assertTrue(
             schedule.teams.none { it.id.any(Char::isDigit) },
             "조 슬롯이 팀으로 저장됐다: ${schedule.teams.map { it.id }}",

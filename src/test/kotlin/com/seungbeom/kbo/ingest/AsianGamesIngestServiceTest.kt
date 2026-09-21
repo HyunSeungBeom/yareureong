@@ -3,7 +3,8 @@ package com.seungbeom.kbo.ingest
 import com.seungbeom.kbo.game.Game
 import com.seungbeom.kbo.game.GameRepository
 import com.seungbeom.kbo.game.GameStatus
-import com.seungbeom.kbo.team.League
+import com.seungbeom.kbo.game.Round
+import com.seungbeom.kbo.league.League
 import com.seungbeom.kbo.team.Team
 import com.seungbeom.kbo.team.TeamRepository
 import org.mockito.ArgumentCaptor
@@ -38,7 +39,7 @@ class AsianGamesIngestServiceTest {
         awayTeamId = "AG-JP",
         startTime = "18:30",
         externalId = "88880921JPKR02026",
-        round = Rounds.GROUP,
+        round = Round.GROUP,
         league = League.ASIAN_GAMES,
     )
 
@@ -81,7 +82,7 @@ class AsianGamesIngestServiceTest {
         val saved = ArgumentCaptor.forClass(Game::class.java)
         verify(games).save(saved.capture())
         assertEquals(League.ASIAN_GAMES, saved.value.league, "KBO 집계에 국제대회가 섞인다")
-        assertEquals(Rounds.GROUP, saved.value.round)
+        assertEquals(Round.GROUP, saved.value.round)
         assertEquals("88880921JPKR02026", saved.value.externalId)
     }
 

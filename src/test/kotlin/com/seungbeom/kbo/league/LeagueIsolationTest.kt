@@ -6,7 +6,7 @@ import com.seungbeom.kbo.game.GameStatus
 import com.seungbeom.kbo.prediction.PredictionService
 import com.seungbeom.kbo.simulation.SimulationService
 import com.seungbeom.kbo.standings.StandingsService
-import com.seungbeom.kbo.team.League
+import com.seungbeom.kbo.league.League
 import com.seungbeom.kbo.team.Team
 import com.seungbeom.kbo.team.TeamRepository
 import org.mockito.ArgumentMatchers

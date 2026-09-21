@@ -1,15 +1,16 @@
 package com.seungbeom.kbo.game
 
+import com.seungbeom.kbo.league.League
 import org.springframework.data.jpa.repository.JpaRepository
 import java.time.LocalDate
 
 interface GameRepository : JpaRepository<Game, Long> {
-    fun findByLeagueAndGameDateOrderByIdAsc(league: String, gameDate: LocalDate): List<Game>
+    fun findByLeagueAndGameDateOrderByIdAsc(league: League, gameDate: LocalDate): List<Game>
 
     /** 리그별 상태 조회 — 순위·시뮬레이션은 KBO 만 봐야 한다. */
-    fun findByLeagueAndStatus(league: String, status: GameStatus): List<Game>
+    fun findByLeagueAndStatus(league: League, status: GameStatus): List<Game>
 
-    fun findByLeagueOrderByGameDateAscIdAsc(league: String): List<Game>
+    fun findByLeagueOrderByGameDateAscIdAsc(league: League): List<Game>
 
     /** upsert 1순위 키: 출처 경기 id(더블헤더 구분). */
     fun findByExternalId(externalId: String): Game?

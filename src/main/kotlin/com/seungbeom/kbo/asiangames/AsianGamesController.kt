@@ -3,7 +3,8 @@ package com.seungbeom.kbo.asiangames
 import com.seungbeom.kbo.game.Game
 import com.seungbeom.kbo.game.GameRepository
 import com.seungbeom.kbo.game.GameStatus
-import com.seungbeom.kbo.team.League
+import com.seungbeom.kbo.game.Round
+import com.seungbeom.kbo.league.League
 import com.seungbeom.kbo.team.Team
 import com.seungbeom.kbo.team.TeamRepository
 import org.springframework.web.bind.annotation.GetMapping
@@ -22,8 +23,8 @@ data class AsianGameView(
     val gameDate: LocalDate,
     val startTime: String?,
     val stadium: String?,
-    /** 예선 / 슈퍼라운드 / 결승 … ([com.seungbeom.kbo.ingest.Rounds]) */
-    val round: String?,
+    /** 예선 / 슈퍼라운드 / 결승 … */
+    val round: Round?,
     val status: GameStatus,
     val home: CountryView,
     val away: CountryView,

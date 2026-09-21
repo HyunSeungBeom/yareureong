@@ -4,7 +4,7 @@ import com.seungbeom.kbo.game.GameRepository
 import com.seungbeom.kbo.game.GameStatus
 import com.seungbeom.kbo.team.TeamRepository
 import org.springframework.stereotype.Service
-import com.seungbeom.kbo.team.League
+import com.seungbeom.kbo.league.League
 
 /**
  * 순위표를 만든다: 팀 목록 + FINAL 경기 → [Standings.compute].

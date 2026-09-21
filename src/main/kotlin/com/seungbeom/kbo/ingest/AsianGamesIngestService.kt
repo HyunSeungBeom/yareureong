@@ -1,7 +1,7 @@
 package com.seungbeom.kbo.ingest
 
 import com.seungbeom.kbo.game.GameRepository
-import com.seungbeom.kbo.team.League
+import com.seungbeom.kbo.league.League
 import com.seungbeom.kbo.team.Team
 import com.seungbeom.kbo.team.TeamRepository
 import org.slf4j.LoggerFactory

@@ -1,7 +1,8 @@
 package com.seungbeom.kbo.ingest
 
 import com.seungbeom.kbo.game.GameStatus
-import com.seungbeom.kbo.team.League
+import com.seungbeom.kbo.game.Round
+import com.seungbeom.kbo.league.League
 import java.time.LocalDate
 
 /**
@@ -21,10 +22,10 @@ data class ScrapedGame(
     val stadium: String? = null,
     /** 출처 경기 id — upsert 키. 없으면 (날짜+홈+원정) 으로 매칭한다. */
     val externalId: String? = null,
-    /** 대회 라운드([Rounds]). KBO 는 null. */
-    val round: String? = null,
+    /** 대회 라운드. KBO 는 null. */
+    val round: Round? = null,
     /** 어느 대회인가. 집계가 섞이면 안 되므로 저장 시점에 반드시 박힌다. */
-    val league: String = League.KBO,
+    val league: League = League.KBO,
 )
 
 /**
@@ -42,14 +43,3 @@ data class ScrapedSchedule(
     val games: List<ScrapedGame> = emptyList(),
 )
 
-/**
- * 대회 라운드 코드. 출처 문자열(`agbaseball_group` …)을 그대로 쓰지 않고 우리 값으로 정규화한다 —
- * 출처가 바뀌어도 화면·DB 는 그대로여야 하고, 모르는 코드는 null 로 흘려보내 화면이 안 깨지게 한다.
- */
-object Rounds {
-    const val GROUP = "GROUP"
-    const val SUPER_ROUND = "SUPER_ROUND"
-    const val PLACEMENT = "PLACEMENT"
-    const val BRONZE = "BRONZE"
-    const val FINAL = "FINAL"
-}

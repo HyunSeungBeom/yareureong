@@ -2,8 +2,8 @@ package com.seungbeom.kbo.asiangames
 
 import com.seungbeom.kbo.game.Game
 import com.seungbeom.kbo.game.GameStatus
-import com.seungbeom.kbo.ingest.Rounds
-import com.seungbeom.kbo.team.League
+import com.seungbeom.kbo.game.Round
+import com.seungbeom.kbo.league.League
 import com.seungbeom.kbo.team.Team
 import java.time.LocalDate
 import kotlin.test.Test
@@ -19,7 +19,7 @@ class AsianGamesControllerTest {
         id = 1, gameDate = date, homeTeamId = home, awayTeamId = away,
         homeScore = hs, awayScore = aws,
         status = if (hs == null) GameStatus.SCHEDULED else GameStatus.FINAL,
-        startTime = "18:30", stadium = "오카자키", round = Rounds.GROUP,
+        startTime = "18:30", stadium = "오카자키", round = Round.GROUP,
         league = League.ASIAN_GAMES,
     )
 
@@ -31,7 +31,7 @@ class AsianGamesControllerTest {
         assertEquals("KR", v.home.code, "국기를 고르려면 접두사 없는 코드가 필요하다")
         assertEquals("차이니스 타이베이", v.away.name)
         assertEquals(5, v.homeScore)
-        assertEquals(Rounds.GROUP, v.round)
+        assertEquals(Round.GROUP, v.round)
         assertEquals("오카자키", v.stadium)
     }
 

@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import java.time.Instant
-import com.seungbeom.kbo.team.League
+import com.seungbeom.kbo.league.League
 
 /** 화면에 내려보내는 글 한 건. `mine` 은 «지금 보는 사람이 글쓴이인가» — 수정·삭제 버튼 노출 판단. */
 data class PostView(

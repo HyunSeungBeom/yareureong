@@ -10,7 +10,7 @@ import java.time.LocalDate
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
-import com.seungbeom.kbo.team.League
+import com.seungbeom.kbo.league.League
 
 /** 그날 경기 + 예측 조립. 승률·등판 이력은 목으로 주고 «무엇이 확률을 움직이나» 를 본다. */
 class PredictionServiceTest {

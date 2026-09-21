@@ -1,7 +1,8 @@
 package com.seungbeom.kbo.ingest
 
 import com.seungbeom.kbo.game.GameStatus
-import com.seungbeom.kbo.team.League
+import com.seungbeom.kbo.game.Round
+import com.seungbeom.kbo.league.League
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestClient
@@ -58,11 +59,11 @@ class NaverAsianGamesSource(
         private val COUNTRY_CODE = Regex("^[A-Z]{2}$")
 
         private val ROUND_BY_CODE = mapOf(
-            "${CATEGORY}_group" to Rounds.GROUP,
-            "${CATEGORY}_super_round" to Rounds.SUPER_ROUND,
-            "${CATEGORY}_placement" to Rounds.PLACEMENT,
-            "${CATEGORY}_bronze" to Rounds.BRONZE,
-            "${CATEGORY}_final" to Rounds.FINAL,
+            "${CATEGORY}_group" to Round.GROUP,
+            "${CATEGORY}_super_round" to Round.SUPER_ROUND,
+            "${CATEGORY}_placement" to Round.PLACEMENT,
+            "${CATEGORY}_bronze" to Round.BRONZE,
+            "${CATEGORY}_final" to Round.FINAL,
         )
 
         private val mapper = ObjectMapper()

@@ -24,7 +24,7 @@ import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
 import org.springframework.test.web.servlet.put
-import com.seungbeom.kbo.team.League
+import com.seungbeom.kbo.league.League
 
 /**
  * 게시판 권한 — 여기가 뚫리면 **남이 내 글을 고치거나 지운다.**
