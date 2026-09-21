@@ -43,6 +43,8 @@ class IngestControllerTest {
         @Autowired lateinit var mvc: MockMvc
         @MockitoBean lateinit var ingestService: ScheduleIngestService
 
+        @MockitoBean lateinit var asianGamesIngestService: AsianGamesIngestService
+
         @Test
         fun `토큰이 없으면 403 이고 수집하지 않는다`() {
             mvc.post("/api/admin/ingest?month=2026-08").andExpect { status { isForbidden() } }
@@ -66,6 +68,26 @@ class IngestControllerTest {
                     jsonPath("$.ingested") { value(86) }
                 }
             verify(ingestService).ingestMonth(YearMonth.of(2026, 8))
+        }
+
+        @Test
+        fun `아시안게임 수집도 같은 토큰으로 막힌다`() {
+            // 출처가 다르다고 보호가 빠지면 공개 주소로 스크래핑을 반복 실행시킬 수 있다.
+            mvc.post("/api/admin/ingest/asian-games?month=2026-09")
+                .andExpect { status { isForbidden() } }
+            verifyNoInteractions(asianGamesIngestService)
+        }
+
+        @Test
+        fun `아시안게임 수집은 KBO 수집을 건드리지 않는다`() {
+            given(asianGamesIngestService.ingestMonth(YearMonth.of(2026, 9))).willReturn(22)
+
+            mvc.post("/api/admin/ingest/asian-games?month=2026-09") { header(ADMIN_TOKEN_HEADER, "s3cret") }
+                .andExpect {
+                    status { isOk() }
+                    jsonPath("$.ingested") { value(22) }
+                }
+            verifyNoInteractions(ingestService)
         }
     }
 }

@@ -44,6 +44,9 @@ class Game(
     /** 출처 경기 id. upsert 키 — 더블헤더를 서로 다른 경기로 구분한다. */
     var externalId: String? = null,
 
+    /** 대회 라운드([com.seungbeom.kbo.ingest.Rounds]). 페넌트레이스인 KBO 는 null. */
+    var round: String? = null,
+
     /**
      * 어느 대회의 경기인가. KBO 순위·우승확률 집계는 이 값이 [League.KBO] 인 것만 본다 —
      * 국제대회 경기가 섞이면 에러 없이 숫자만 틀어진다.

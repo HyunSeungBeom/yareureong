@@ -48,6 +48,7 @@ class ScheduleIngestService(
                 gameDate = s.gameDate,
                 homeTeamId = s.homeTeamId,
                 awayTeamId = s.awayTeamId,
+                league = s.league,
             )
             game.homeScore = s.homeScore
             game.awayScore = s.awayScore
@@ -63,6 +64,7 @@ class ScheduleIngestService(
             if (game.status != GameStatus.FINAL || game.awayStartPitcher == null) {
                 game.awayStartPitcher = s.awayStartPitcher ?: game.awayStartPitcher
             }
+            game.round = s.round ?: game.round
             game.startTime = s.startTime ?: game.startTime
             game.stadium = s.stadium ?: game.stadium
             return game

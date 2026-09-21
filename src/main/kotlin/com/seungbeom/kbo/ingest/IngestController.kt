@@ -20,6 +20,7 @@ import java.time.YearMonth
 @RestController
 class IngestController(
     private val ingestService: ScheduleIngestService,
+    private val asianGamesIngestService: AsianGamesIngestService,
     @Value("\${app.admin.token:}") private val adminToken: String,
 ) {
     @PostMapping("/api/admin/ingest")
@@ -30,6 +31,18 @@ class IngestController(
         if (!authorized(adminToken, token)) return ResponseEntity.status(HttpStatus.FORBIDDEN).build()
 
         val count = ingestService.ingestMonth(YearMonth.parse(month))
+        return ResponseEntity.ok(mapOf("month" to month, "ingested" to count))
+    }
+
+    /** 아시안게임은 출처가 달라 엔드포인트를 나눈다. 대회 기간이 아니면 0건이 반영된다. */
+    @PostMapping("/api/admin/ingest/asian-games")
+    fun ingestAsianGames(
+        @RequestHeader(ADMIN_TOKEN_HEADER, required = false) token: String?,
+        @RequestParam month: String,
+    ): ResponseEntity<Map<String, Any>> {
+        if (!authorized(adminToken, token)) return ResponseEntity.status(HttpStatus.FORBIDDEN).build()
+
+        val count = asianGamesIngestService.ingestMonth(YearMonth.parse(month))
         return ResponseEntity.ok(mapOf("month" to month, "ingested" to count))
     }
 

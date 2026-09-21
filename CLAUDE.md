@@ -51,6 +51,10 @@ cd web && npm run verify                # type-check · test · lint
   순위·시뮬레이션·예측·일정은 전부 `League.KBO` 로 좁혀서 조회한다. 국가대표 경기는 승률·선발 기록이
   쌓이지 않으므로 **예측 대상이 아니다** — 일정·결과만 보여준다.
   `findAll()` 같은 리그 없는 조회는 `LeagueQueryConventionTest` 가 소스에서 찾아 막는다
+- 아시안게임 출처는 **네이버**(`NaverAsianGamesSource`) — 다음에는 국제대회 리그 코드가 없다.
+  참가국은 일정과 함께 들어와 `AG-KR` 처럼 접두사를 붙여 저장한다(KBO 코드와 충돌 방지).
+  조 편성 전 슬롯(`A1` vs `B3`)은 **버린다** — 저장하면 team 테이블에 가짜 구단이 생긴다.
+  요청 URL 에 `fields=basic,stadium,roundCode` 를 꼭 넣는다. 빼면 구장·라운드가 **조용히 null** 이 된다
 - ⚠️ **`live` 프로필 없이 수집을 부르면 샘플 출처가 실제 결과를 가짜 점수로 덮어쓴다**(upsert 라 에러 없음).
   실DB 에 붙은 앱은 반드시 `live` 로 띄운다. 운영은 `/actuator/info` 의 `ingestSource` 를 배포 파이프라인이 확인한다
 

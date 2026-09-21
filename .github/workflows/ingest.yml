@@ -49,4 +49,9 @@ jobs:
             result=$(curl -fsS --retry 5 --retry-delay 20 --retry-all-errors --max-time 150 \
               -X POST -H "X-Admin-Token: $ADMIN_TOKEN" "$API_URL/api/admin/ingest?month=$month")
             echo "$month → $result"
+
+            # 국제대회는 출처가 달라 따로 부른다. 대회 기간이 아니면 0건이라 그냥 둬도 된다.
+            ag=$(curl -fsS --retry 3 --retry-delay 10 --retry-all-errors --max-time 150 \
+              -X POST -H "X-Admin-Token: $ADMIN_TOKEN" "$API_URL/api/admin/ingest/asian-games?month=$month")
+            echo "$month (아시안게임) → $ag"
           done
