@@ -7,6 +7,7 @@ import com.seungbeom.kbo.standings.StandingsService
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 import java.time.ZoneId
+import com.seungbeom.kbo.team.League
 
 /**
  * 계산된 순위(승률)와 선발 등판 이력을 읽어 승리확률을 낸다.
@@ -31,11 +32,11 @@ class PredictionService(
      * 한국 새벽 시간대에 «어제 경기» 가 뜬다.
      */
     fun gamesOn(date: LocalDate = LocalDate.now(KST)): List<TodayGame> {
-        val games = gameRepository.findByGameDateOrderByIdAsc(date)
+        val games = gameRepository.findByLeagueAndGameDateOrderByIdAsc(League.KBO, date)
         if (games.isEmpty()) return emptyList()
 
         val winPct = standingsService.winPctByTeam()
-        val ratings = StarterRatings(gameRepository.findByStatus(GameStatus.FINAL))
+        val ratings = StarterRatings(gameRepository.findByLeagueAndStatus(League.KBO, GameStatus.FINAL))
         return games.map { toTodayGame(it, winPct, ratings) }
     }
 

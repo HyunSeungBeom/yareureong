@@ -3,6 +3,7 @@ package com.seungbeom.kbo.game
 import com.seungbeom.kbo.team.TeamRepository
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
+import com.seungbeom.kbo.team.League
 
 class InvalidGameFilterException(val errors: List<String>) :
     IllegalArgumentException(errors.joinToString("; "))
@@ -17,10 +18,10 @@ class GameSearchService(
     private val teamRepository: TeamRepository,
 ) {
     fun search(filter: GameFilter): List<Game> {
-        val known = teamRepository.findAll().mapTo(HashSet()) { it.id }
+        val known = teamRepository.findByLeague(League.KBO).mapTo(HashSet()) { it.id }
         val errors = filter.validate(known)
         if (errors.isNotEmpty()) throw InvalidGameFilterException(errors)
 
-        return gameRepository.findAll(Sort.by("gameDate", "id")).filter(filter::matches)
+        return gameRepository.findByLeagueOrderByGameDateAscIdAsc(League.KBO).filter(filter::matches)
     }
 }

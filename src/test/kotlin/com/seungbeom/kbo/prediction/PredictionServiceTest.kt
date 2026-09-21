@@ -10,6 +10,7 @@ import java.time.LocalDate
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
+import com.seungbeom.kbo.team.League
 
 /** 그날 경기 + 예측 조립. 승률·등판 이력은 목으로 주고 «무엇이 확률을 움직이나» 를 본다. */
 class PredictionServiceTest {
@@ -34,13 +35,13 @@ class PredictionServiceTest {
 
     private fun setUp(todayGames: List<Game>, history: List<Game> = emptyList()) {
         given(standings.winPctByTeam()).willReturn(mapOf("OB" to 0.520, "LG" to 0.567))
-        given(games.findByGameDateOrderByIdAsc(today)).willReturn(todayGames)
-        given(games.findByStatus(GameStatus.FINAL)).willReturn(history)
+        given(games.findByLeagueAndGameDateOrderByIdAsc(League.KBO, today)).willReturn(todayGames)
+        given(games.findByLeagueAndStatus(League.KBO, GameStatus.FINAL)).willReturn(history)
     }
 
     @Test
     fun `그날 경기가 없으면 빈 목록이다`() {
-        given(games.findByGameDateOrderByIdAsc(today)).willReturn(emptyList())
+        given(games.findByLeagueAndGameDateOrderByIdAsc(League.KBO, today)).willReturn(emptyList())
 
         assertEquals(emptyList(), service.gamesOn(today))
     }

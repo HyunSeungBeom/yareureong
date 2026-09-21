@@ -4,6 +4,7 @@ import com.seungbeom.kbo.game.GameRepository
 import com.seungbeom.kbo.game.GameStatus
 import com.seungbeom.kbo.team.TeamRepository
 import org.springframework.stereotype.Service
+import com.seungbeom.kbo.team.League
 
 /**
  * 순위표를 만든다: 팀 목록 + FINAL 경기 → [Standings.compute].
@@ -15,8 +16,9 @@ class StandingsService(
     private val gameRepository: GameRepository,
 ) {
     fun standings(): List<TeamStanding> {
-        val teams = teamRepository.findAll()
-        val finals = gameRepository.findByStatus(GameStatus.FINAL)
+        val teams = teamRepository.findByLeague(League.KBO)
+        /* 국제대회 경기가 섞이면 순위가 조용히 틀어진다 — 리그를 반드시 좁힌다 */
+        val finals = gameRepository.findByLeagueAndStatus(League.KBO, GameStatus.FINAL)
         return Standings.compute(teams, finals)
     }
 

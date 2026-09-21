@@ -4,10 +4,12 @@ import org.springframework.data.jpa.repository.JpaRepository
 import java.time.LocalDate
 
 interface GameRepository : JpaRepository<Game, Long> {
-    fun findByGameDateOrderByIdAsc(gameDate: LocalDate): List<Game>
+    fun findByLeagueAndGameDateOrderByIdAsc(league: String, gameDate: LocalDate): List<Game>
 
-    /** 순위 계산용: 종료된 경기만. */
-    fun findByStatus(status: GameStatus): List<Game>
+    /** 리그별 상태 조회 — 순위·시뮬레이션은 KBO 만 봐야 한다. */
+    fun findByLeagueAndStatus(league: String, status: GameStatus): List<Game>
+
+    fun findByLeagueOrderByGameDateAscIdAsc(league: String): List<Game>
 
     /** upsert 1순위 키: 출처 경기 id(더블헤더 구분). */
     fun findByExternalId(externalId: String): Game?

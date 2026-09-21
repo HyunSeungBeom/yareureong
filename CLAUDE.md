@@ -47,6 +47,10 @@ cd web && npm run verify                # type-check · test · lint
   **표시만** 하고 계산에 넣지 않는다
 - upsert 키는 **출처 경기 id**(`external_id`)다. (날짜+홈+원정)은 더블헤더에서 두 경기가 한 건으로 덮어써진다
 - 수집 API 는 `X-Admin-Token` 이 `app.admin.token` 과 같아야 한다. **토큰 설정이 비면 항상 403** — 설정을 빠뜨려도 열리지 않게
+- **리그가 다르면 절대 섞지 않는다.** `team`·`game` 에 `league` 컬럼이 있고(`KBO` / `AG` = 아시안게임),
+  순위·시뮬레이션·예측·일정은 전부 `League.KBO` 로 좁혀서 조회한다. 국가대표 경기는 승률·선발 기록이
+  쌓이지 않으므로 **예측 대상이 아니다** — 일정·결과만 보여준다.
+  `findAll()` 같은 리그 없는 조회는 `LeagueQueryConventionTest` 가 소스에서 찾아 막는다
 - ⚠️ **`live` 프로필 없이 수집을 부르면 샘플 출처가 실제 결과를 가짜 점수로 덮어쓴다**(upsert 라 에러 없음).
   실DB 에 붙은 앱은 반드시 `live` 로 띄운다. 운영은 `/actuator/info` 의 `ingestSource` 를 배포 파이프라인이 확인한다
 

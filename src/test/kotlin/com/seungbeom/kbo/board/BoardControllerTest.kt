@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
 import org.springframework.test.web.servlet.put
+import com.seungbeom.kbo.team.League
 
 /**
  * 게시판 권한 — 여기가 뚫리면 **남이 내 글을 고치거나 지운다.**
@@ -97,7 +98,7 @@ class BoardControllerTest {
     fun `내 글은 고칠 수 있다`() {
         loggedInAs(author)
         given(posts.findByIdAndDeletedAtIsNull(1)).willReturn(post)
-        given(teams.findAll()).willReturn(listOf(Team("OB", "두산 베어스")))
+        given(teams.findByLeague(League.KBO)).willReturn(listOf(Team("OB", "두산 베어스")))
         given(postService.update(anyArg(), anyArg())).willReturn(post)
 
         mvc.put("/api/board/posts/1") {

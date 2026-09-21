@@ -5,6 +5,7 @@ import com.seungbeom.kbo.game.GameStatus
 import com.seungbeom.kbo.standings.StandingsService
 import org.springframework.stereotype.Service
 import kotlin.random.Random
+import com.seungbeom.kbo.team.League
 
 /**
  * 현재 순위 + 남은 경기로 시즌을 몬테카를로 시뮬레이션한다.
@@ -18,7 +19,7 @@ class SimulationService(
     fun simulate(iterations: Int): List<SimulationResult> {
         val n = iterations.coerceIn(MIN_ITERATIONS, MAX_ITERATIONS)
         val standings = standingsService.standings()
-        val remaining = gameRepository.findByStatus(GameStatus.SCHEDULED)
+        val remaining = gameRepository.findByLeagueAndStatus(League.KBO, GameStatus.SCHEDULED)
         return SeasonSimulator.simulate(standings, remaining, n, Random.Default)
     }
 

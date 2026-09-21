@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import java.time.LocalDate
+import com.seungbeom.kbo.team.League
 
 @RestController
 @RequestMapping("/api")
@@ -27,8 +28,8 @@ class GameController(
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
         date: LocalDate?,
     ): List<Game> =
-        if (date != null) gameRepository.findByGameDateOrderByIdAsc(date)
-        else gameRepository.findAll()
+        if (date != null) gameRepository.findByLeagueAndGameDateOrderByIdAsc(League.KBO, date)
+        else gameRepository.findByLeagueOrderByGameDateAscIdAsc(League.KBO)
 
     /**
      * 조건 검색. 모든 파라미터 선택, 조건끼리는 AND. venue·result·opponent 는 team 관점.

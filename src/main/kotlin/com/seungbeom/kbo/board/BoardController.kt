@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import java.time.Instant
+import com.seungbeom.kbo.team.League
 
 /** 화면에 내려보내는 글 한 건. `mine` 은 «지금 보는 사람이 글쓴이인가» — 수정·삭제 버튼 노출 판단. */
 data class PostView(
@@ -137,7 +138,7 @@ class BoardController(
         return ResponseEntity.noContent().build()
     }
 
-    private fun teamIds(): Set<String> = teams.findAll().mapTo(HashSet()) { it.id }
+    private fun teamIds(): Set<String> = teams.findByLeague(League.KBO).mapTo(HashSet()) { it.id }
 
     private fun view(post: Post, author: User?, me: User?) = PostView(
         id = post.id!!,
@@ -173,7 +174,7 @@ class PostService(
 ) {
     fun validate(form: PostForm, teamId: String, authorId: Long): List<PostViolation> {
         val violations = PostRules.validate(
-            form.title, form.content, teams.findAll().mapTo(HashSet()) { it.id }, teamId,
+            form.title, form.content, teams.findByLeague(League.KBO).mapTo(HashSet()) { it.id }, teamId,
         ).toMutableList()
 
         /* 도배 방지는 «지금 몇 개 썼나» 를 봐야 해서 저장소가 필요하다 — 규칙 자체는 PostRules 가 갖는다 */
