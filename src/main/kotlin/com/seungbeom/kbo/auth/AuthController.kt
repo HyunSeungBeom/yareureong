@@ -6,17 +6,12 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseCookie
 import org.springframework.http.ResponseEntity
-import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.CookieValue
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-
-/** 화면에 내려보내는 «나» — 내부 id 는 숨기지 않아도 되지만 필요한 것만 준다. */
-data class Me(val id: Long, val nickname: String, val profileImageUrl: String?)
 
 /**
  * 카카오 로그인 — 브라우저는 토큰을 만지지 않는다.
@@ -126,28 +121,5 @@ class AuthController(
          */
         fun safeRedirect(raw: String?): String =
             raw?.takeIf { it.startsWith("/") && !it.startsWith("//") } ?: "/"
-    }
-}
-
-/** 소셜 프로필 → 우리 사용자. 처음이면 만들고, 있으면 닉네임·사진을 최신으로 맞춘다. */
-@Service
-class UserService(private val users: UserRepository) {
-
-    @Transactional
-    fun upsert(provider: AuthProvider, profile: KakaoProfile): User {
-        val existing = users.findByProviderAndProviderUserId(provider.name, profile.id)
-        if (existing != null) {
-            existing.nickname = profile.nickname
-            existing.profileImageUrl = profile.profileImageUrl
-            return users.save(existing)
-        }
-        return users.save(
-            User(
-                provider = provider.name,
-                providerUserId = profile.id,
-                nickname = profile.nickname,
-                profileImageUrl = profile.profileImageUrl,
-            ),
-        )
     }
 }

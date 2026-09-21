@@ -2,6 +2,7 @@ package com.seungbeom.kbo.board
 
 import com.seungbeom.kbo.auth.AuthController.Companion.SESSION_COOKIE
 import com.seungbeom.kbo.auth.SessionService
+import com.seungbeom.kbo.league.League
 import com.seungbeom.kbo.auth.User
 import com.seungbeom.kbo.auth.UserRepository
 import com.seungbeom.kbo.team.TeamRepository
@@ -22,25 +23,6 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import java.time.Instant
-import com.seungbeom.kbo.league.League
-
-/** 화면에 내려보내는 글 한 건. `mine` 은 «지금 보는 사람이 글쓴이인가» — 수정·삭제 버튼 노출 판단. */
-data class PostView(
-    val id: Long,
-    val teamId: String,
-    val title: String,
-    val content: String,
-    val authorNickname: String,
-    val authorProfileImageUrl: String?,
-    val createdAt: Instant,
-    val updatedAt: Instant,
-    val edited: Boolean,
-    val mine: Boolean,
-)
-
-data class PostPage(val items: List<PostView>, val page: Int, val size: Int, val totalPages: Int, val totalItems: Long)
-
-data class PostForm(val title: String = "", val content: String = "")
 
 /**
  * 팀별 팬 게시판.
@@ -165,41 +147,4 @@ class BoardController(
     /** 실패 응답 모양은 경기 검색 API 와 같다(`errors` 목록) — 프론트가 같은 코드로 읽는다. */
     private fun problem(status: HttpStatus, detail: String, errors: List<String>): ProblemDetail =
         ProblemDetail.forStatusAndDetail(status, detail).apply { setProperty("errors", errors) }
-}
-
-@Service
-class PostService(
-    private val posts: PostRepository,
-    private val teams: TeamRepository,
-) {
-    fun validate(form: PostForm, teamId: String, authorId: Long): List<PostViolation> {
-        val violations = PostRules.validate(
-            form.title, form.content, teams.findByLeague(League.KBO).mapTo(HashSet()) { it.id }, teamId,
-        ).toMutableList()
-
-        /* 도배 방지는 «지금 몇 개 썼나» 를 봐야 해서 저장소가 필요하다 — 규칙 자체는 PostRules 가 갖는다 */
-        val since = Instant.now().minus(PostRules.RATE_WINDOW)
-        if (posts.countByAuthorIdAndCreatedAtAfter(authorId, since) >= PostRules.RATE_LIMIT) {
-            violations += PostViolation.TOO_MANY
-        }
-        return violations
-    }
-
-    @Transactional
-    fun create(teamId: String, authorId: Long, form: PostForm): Post =
-        posts.save(Post(teamId = teamId, authorId = authorId, title = form.title.trim(), content = form.content.trim()))
-
-    @Transactional
-    fun update(post: Post, form: PostForm): Post {
-        post.title = form.title.trim()
-        post.content = form.content.trim()
-        post.updatedAt = Instant.now()
-        return posts.save(post)
-    }
-
-    @Transactional
-    fun softDelete(post: Post) {
-        post.deletedAt = Instant.now()
-        posts.save(post)
-    }
 }

@@ -9,7 +9,7 @@ import java.time.LocalDate
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class AsianGamesControllerTest {
+class AsianGamesServiceTest {
 
     private val date = LocalDate.of(2026, 9, 21)
     private val korea = Team("AG-KR", "대한민국", League.ASIAN_GAMES)
@@ -25,7 +25,7 @@ class AsianGamesControllerTest {
 
     @Test
     fun `국가 이름과 코드를 붙여 내려준다`() {
-        val v = AsianGamesController.views(listOf(game("AG-KR", "AG-TW", 5, 2)), listOf(korea, taipei)).single()
+        val v = AsianGamesService.views(listOf(game("AG-KR", "AG-TW", 5, 2)), listOf(korea, taipei)).single()
 
         assertEquals("대한민국", v.home.name)
         assertEquals("KR", v.home.code, "국기를 고르려면 접두사 없는 코드가 필요하다")
@@ -38,7 +38,7 @@ class AsianGamesControllerTest {
     @Test
     fun `모르는 참가국이어도 경기를 버리지 않는다`() {
         // 참가국 저장이 한 건 실패해도 그날 일정이 통째로 사라지면 안 된다.
-        val v = AsianGamesController.views(listOf(game("AG-KR", "AG-XX")), listOf(korea)).single()
+        val v = AsianGamesService.views(listOf(game("AG-KR", "AG-XX")), listOf(korea)).single()
 
         assertEquals("XX", v.away.name)
         assertEquals("XX", v.away.code)

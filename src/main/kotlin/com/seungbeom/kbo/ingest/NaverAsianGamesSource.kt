@@ -1,5 +1,6 @@
 package com.seungbeom.kbo.ingest
 
+import com.seungbeom.kbo.asiangames.AsianGamesTeams
 import com.seungbeom.kbo.game.GameStatus
 import com.seungbeom.kbo.game.Round
 import com.seungbeom.kbo.league.League
@@ -68,10 +69,8 @@ class NaverAsianGamesSource(
 
         private val mapper = ObjectMapper()
 
-        /** 국가 코드를 그대로 팀 id 로 쓰면 KBO 코드(`KT`·`LG`)와 부딪힌다. 대회 접두사를 붙인다. */
-        const val ID_PREFIX = "AG-"
-
-        fun teamId(countryCode: String): String = ID_PREFIX + countryCode
+        /** 팀 id 규칙은 [AsianGamesTeams] 한 곳이 소유한다 — 접두사를 복제하지 않는다. */
+        fun teamId(countryCode: String): String = AsianGamesTeams.id(countryCode)
 
         fun buildUrl(month: YearMonth): String =
             "https://api-gw.sports.naver.com/schedule/games" +
@@ -109,7 +108,7 @@ class NaverAsianGamesSource(
         /** 이름이 비면 국가 코드를 이름 자리에 쓴다 — 화면도 같은 방식으로 버틴다. */
         private fun teamName(node: JsonNode, side: String, teamId: String): String =
             node.path("${side}TeamName").asString(null)?.takeIf { it.isNotBlank() }
-                ?: teamId.removePrefix(ID_PREFIX)
+                ?: AsianGamesTeams.codeOf(teamId)
 
         private fun parseGame(node: JsonNode): ScrapedGame? {
             if (node.path("categoryId").asString(null) != CATEGORY) return null
