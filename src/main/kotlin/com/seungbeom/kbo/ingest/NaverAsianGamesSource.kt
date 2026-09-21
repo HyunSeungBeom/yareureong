@@ -68,7 +68,9 @@ class NaverAsianGamesSource(
         private val mapper = ObjectMapper()
 
         /** 국가 코드를 그대로 팀 id 로 쓰면 KBO 코드(`KT`·`LG`)와 부딪힌다. 대회 접두사를 붙인다. */
-        fun teamId(countryCode: String): String = "AG-$countryCode"
+        const val ID_PREFIX = "AG-"
+
+        fun teamId(countryCode: String): String = ID_PREFIX + countryCode
 
         fun buildUrl(month: YearMonth): String =
             "https://api-gw.sports.naver.com/schedule/games" +
@@ -92,19 +94,21 @@ class NaverAsianGamesSource(
 
             val teams = LinkedHashMap<String, ScrapedTeam>()
             val parsed = games.mapNotNull { node ->
-                parseGame(node)?.also {
-                    team(node, "home")?.let { t -> teams[t.id] = t }
-                    team(node, "away")?.let { t -> teams[t.id] = t }
-                }
+                val game = parseGame(node) ?: return@mapNotNull null
+                /* 팀 id 를 경기에서 그대로 가져온다. 노드를 따로 읽어 만들면 «경기는 가리키는데
+                   목록에 없는 팀» 이 생길 수 있고, 그러면 외래키 위반으로 그 달 수집이 통째로
+                   롤백된다 — 한 경기만 빠지는 게 아니다. */
+                teams[game.homeTeamId] = ScrapedTeam(game.homeTeamId, teamName(node, "home", game.homeTeamId))
+                teams[game.awayTeamId] = ScrapedTeam(game.awayTeamId, teamName(node, "away", game.awayTeamId))
+                game
             }
             return ScrapedSchedule(teams.values.toList(), parsed)
         }
 
-        private fun team(node: JsonNode, side: String): ScrapedTeam? {
-            val code = node.path("${side}TeamCode").asString(null) ?: return null
-            val name = node.path("${side}TeamName").asString(null)?.takeIf { it.isNotBlank() } ?: return null
-            return ScrapedTeam(teamId(code), name)
-        }
+        /** 이름이 비면 국가 코드를 이름 자리에 쓴다 — 화면도 같은 방식으로 버틴다. */
+        private fun teamName(node: JsonNode, side: String, teamId: String): String =
+            node.path("${side}TeamName").asString(null)?.takeIf { it.isNotBlank() }
+                ?: teamId.removePrefix(ID_PREFIX)
 
         private fun parseGame(node: JsonNode): ScrapedGame? {
             if (node.path("categoryId").asString(null) != CATEGORY) return null

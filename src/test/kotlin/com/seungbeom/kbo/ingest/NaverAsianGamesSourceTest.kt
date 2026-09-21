@@ -84,6 +84,31 @@ class NaverAsianGamesSourceTest {
     }
 
     @Test
+    fun `경기가 가리키는 참가국은 반드시 목록에 있다`() {
+        val schedule = parsed()
+        val used = schedule.games.flatMap { listOf(it.homeTeamId, it.awayTeamId) }.toSet()
+
+        // 하나라도 빠지면 외래키 위반으로 **그 달 수집 전체가** 롤백된다.
+        assertTrue(schedule.teams.map { it.id }.containsAll(used), "경기가 없는 팀을 가리킨다: $used")
+    }
+
+    @Test
+    fun `참가국 이름이 비어도 팀을 만든다`() {
+        val body = """
+            {"result":{"games":[{
+              "categoryId":"agbaseball","gameId":"x1","gameDate":"2026-09-21",
+              "homeTeamCode":"KR","homeTeamName":"대한민국",
+              "awayTeamCode":"XX","awayTeamName":"",
+              "statusCode":"BEFORE","cancel":false
+            }]}}
+        """.trimIndent()
+        val schedule = NaverAsianGamesSource.parse(body)
+
+        assertEquals(setOf("AG-KR", "AG-XX"), schedule.teams.map { it.id }.toSet())
+        assertEquals("XX", schedule.teams.single { it.id == "AG-XX" }.name, "이름이 없으면 코드로 버틴다")
+    }
+
+    @Test
     fun `응답이 비거나 깨져도 예외 없이 빈 결과를 준다`() {
         // 문서 없는 API 라 언제든 형태가 바뀔 수 있다. 수집이 터지면 다른 리그까지 못 갱신한다.
         for (body in listOf(null, "", "not json", """{"result":{}}""", """{"result":{"games":"?"}}""")) {
