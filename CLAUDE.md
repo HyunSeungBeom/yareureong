@@ -79,7 +79,7 @@ cd web && npm run verify                # type-check · test · lint
 
 ### 세 번째 당사자 — 앱
 
-RN 앱이 [kbo-predictor-app](https://github.com/HyunSeungBeom/yareureong-app) 레포에서 **같은 API**
+RN 앱이 [yareureong-app](https://github.com/HyunSeungBeom/yareureong-app) 레포에서 **같은 API**
 를 본다. 레포가 달라 테스트로 묶을 수 없으니 앱이 `model/`·`api/` 파일을 **복제**하고, 앱 쪽
 COPY 검사가 (웹 레포가 옆에 체크아웃돼 있으면) 바이트 단위로 대조한다.
 
