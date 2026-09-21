@@ -64,8 +64,9 @@ tests/                      특정 도메인에 속하지 않는 것만
 | `SIM` | 진출·우승 확률 차트 데이터 정렬·환산 | `lib/simulation/__tests__/chart.test.ts` |
 | `SUM` | 선발 기록 표시 문구(표본 수 · 첫 선발 · 상대전적) | `lib/prediction/__tests__/summary.test.ts` |
 | `TDY` | 오늘 경기 보드 | `lib/prediction/__tests__/TodayBoard.test.tsx` |
-| `AGS` | 아시안게임 표시 규칙(라운드 · 국기 · 보여줄 하루) | `lib/asianGames/__tests__/summary.test.ts` |
-| `AGB` | 아시안게임 보드(대회 아니면 사라짐 · 확률 없음) | `lib/asianGames/__tests__/AsianGamesBoard.test.tsx` |
+| `DATE` | 경기 날짜 표기 · 한국 기준 오늘 | `lib/games/__tests__/date.test.ts` |
+| `AGS` | 아시안게임 표시 규칙(라운드 · 국기 · 보여줄 하루) | `lib/asiangames/__tests__/summary.test.ts` |
+| `AGB` | 아시안게임 보드(대회 아니면 사라짐 · 확률 없음) | `lib/asiangames/__tests__/AsianGamesBoard.test.tsx` |
 | `SCH` | 일정 목록 화면 | `lib/games/__tests__/ScheduleList.test.tsx` |
 | `BRD` | 게시판 화면(로그인 분기 · 내 글만 수정·삭제) | `lib/board/__tests__/TeamBoard.test.tsx` |
 | `FMT` | 글 시간 표기 | `lib/board/__tests__/format.test.ts` |

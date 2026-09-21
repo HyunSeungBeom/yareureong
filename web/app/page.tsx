@@ -1,4 +1,4 @@
-import { AsianGamesBoard } from "@/lib/asianGames";
+import { AsianGamesBoard } from "@/lib/asiangames";
 import { TodayBoard } from "@/lib/prediction";
 import { ProbabilityChart } from "@/lib/simulation";
 import { StandingsTable } from "@/lib/standings";

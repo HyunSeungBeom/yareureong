@@ -51,6 +51,9 @@ cd web && npm run verify                # type-check · test · lint
   DB 값은 `KBO` / `AG`), 순위·시뮬레이션·예측·일정은 전부 `League.KBO` 로 좁혀서 조회한다. 국가대표 경기는 승률·선발 기록이
   쌓이지 않으므로 **예측 대상이 아니다** — 일정·결과만 보여준다.
   `findAll()` 같은 리그 없는 조회는 `LeagueQueryConventionTest` 가 소스에서 찾아 막는다
+- 대회가 **세 번째**로 늘면 `ScheduleIngestService` 와 `AsianGamesIngestService` 를 하나로 합친다.
+  둘의 차이는 «참가팀을 먼저 만드느냐» 하나뿐이라, `KboScheduleSource` 도 `ScrapedSchedule` 을
+  돌려주게 하면 서비스 하나로 끝난다. 지금 합치면 과설계라 두 번까지는 복제해 둔다
 - 아시안게임 출처는 **네이버**(`NaverAsianGamesSource`) — 다음에는 국제대회 리그 코드가 없다.
   참가국은 일정과 함께 들어와 `AG-KR` 처럼 접두사를 붙여 저장한다(KBO 코드와 충돌 방지).
   조 편성 전 슬롯(`A1` vs `B3`)은 **버린다** — 저장하면 team 테이블에 가짜 구단이 생긴다.

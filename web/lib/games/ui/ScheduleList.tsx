@@ -1,5 +1,6 @@
 "use client";
 
+import { dayLabel } from "../model/date";
 import { useMemo } from "react";
 import { Card } from "@/components/ds";
 import { ApiError } from "@/lib/api";
@@ -78,7 +79,7 @@ export function ScheduleList() {
                 : { label: "예정", className: "text-emerald-600" };
             return (
               <li key={g.id} className="flex items-center gap-2 py-2 text-sm">
-                <span className="w-24 text-slate-500 tabular-nums">{g.gameDate}</span>
+                <span className="w-24 text-slate-500">{dayLabel(g.gameDate)}</span>
                 <span
                   className={`flex flex-1 items-center justify-end gap-1.5 ${
                     g.homeTeamId === filter.team ? "font-semibold" : ""

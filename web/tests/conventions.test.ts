@@ -165,6 +165,19 @@ describe("ARCH 007: queryKey 는 팩토리를 거친다", () => {
   });
 });
 
+describe("ARCH 009: 도메인 폴더 이름은 소문자다", () => {
+  const KNOWN: Record<string, string> = {};
+
+  it("백엔드 패키지와 1:1 이라 표기가 갈리면 짝이 안 보인다", () => {
+    /* 백엔드 패키지는 소문자만 쓴다(`asiangames`). 한쪽만 카멜이면 «같은 도메인» 이라는 게
+       이름으로 드러나지 않고, import 경로 오타도 잦아진다 */
+    const hits = [...new Set(LIB.map((f) => moduleOf(f.path)!))]
+      .filter((m) => m !== m.toLowerCase())
+      .map((m) => `lib/${m}`);
+    expectMatchesKnown(hits, KNOWN, "도메인 폴더 이름에 대문자가 있다");
+  });
+});
+
 describe("ARCH 008: 도메인끼리 순환 의존하지 않는다", () => {
   it("배럴 순환은 import 순서에 따라 undefined 가 되는 버그를 만든다", () => {
     const edges: Record<string, Set<string>> = {};

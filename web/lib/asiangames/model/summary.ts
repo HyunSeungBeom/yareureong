@@ -1,3 +1,4 @@
+import { seoulToday } from "@/lib/games";
 import type { AsianGame } from "./types";
 
 /** 우리가 응원하는 쪽. 한국 경기는 카드에서 강조한다. */
@@ -31,19 +32,6 @@ export function flagEmoji(code: string): string | null {
   if (!/^[A-Za-z]{2}$/.test(iso)) return null;
   return [...iso.toUpperCase()].map((c) => String.fromCodePoint(0x1f1e6 + c.charCodeAt(0) - 65)).join("");
 }
-
-/** "9월 21일 (월)" — 대회가 2주짜리라 연도는 군더더기다. */
-export function dayLabel(date: string): string {
-  const [, month, day] = date.split("-").map(Number);
-  /* 자정을 UTC 로 읽고 UTC 요일을 쓴다. 한쪽만 시간대를 붙이면 날짜가 하루 밀린다
-     (`T00:00:00+09:00` 은 UTC 로 전날 15시다 — 실제로 하루 어긋났다). */
-  const weekday = ["일", "월", "화", "수", "목", "금", "토"][new Date(`${date}T00:00:00Z`).getUTCDay()];
-  return `${month}월 ${day}일 (${weekday})`;
-}
-
-/** KST 기준 오늘(YYYY-MM-DD). 브라우저가 어느 시간대에 있든 한국 날짜로 본다. */
-export const seoulToday = (now: Date = new Date()): string =>
-  new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Seoul", dateStyle: "short" }).format(now);
 
 export interface GameDay {
   date: string;

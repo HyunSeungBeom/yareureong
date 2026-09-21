@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { dayLabel, flagEmoji, isKoreaGame, pickDay, roundLabel, scoreLabel, seoulToday, type AsianGame } from "..";
+import { flagEmoji, isKoreaGame, pickDay, roundLabel, scoreLabel, type AsianGame } from "..";
 
 const game = (over: Partial<AsianGame> = {}): AsianGame => ({
   gameId: 1,
@@ -71,12 +71,7 @@ describe("AGS 003: 보여줄 하루 고르기", () => {
   });
 });
 
-describe("AGS 004: 날짜·점수·한국 경기 표기", () => {
-  it("연도 없이 요일까지 보여준다", () => {
-    expect(dayLabel("2026-09-21")).toBe("9월 21일 (월)");
-    expect(dayLabel("2026-09-27")).toBe("9월 27일 (일)");
-  });
-
+describe("AGS 004: 점수·한국 경기 표기", () => {
   it("종료 경기만 점수를 보여준다 — 예정 경기 0대0 은 무승부로 읽힌다", () => {
     expect(scoreLabel(game({ status: "FINAL", homeScore: 5, awayScore: 2 }))).toBe("2 : 5");
     expect(scoreLabel(game({ homeScore: 0, awayScore: 0 }))).toBeNull();
@@ -101,11 +96,5 @@ describe("AGS 004: 날짜·점수·한국 경기 표기", () => {
         }),
       ),
     ).toBe(false);
-  });
-
-  it("오늘은 브라우저 시간대가 아니라 한국 날짜다", () => {
-    // 2026-09-21 09:00 UTC = 18:00 KST 같은 날, 2026-09-21 16:00 UTC = 22일 01:00 KST
-    expect(seoulToday(new Date("2026-09-21T09:00:00Z"))).toBe("2026-09-21");
-    expect(seoulToday(new Date("2026-09-21T16:00:00Z"))).toBe("2026-09-22");
   });
 });

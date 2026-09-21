@@ -10,7 +10,7 @@
 app/              라우트만 (도메인 배럴에서 UI 를 가져와 조립)
 components/ds/    도메인과 무관한 공용 부품
 lib/api/          HTTP 코어 — fetch 는 여기서만
-lib/{도메인}/      games · teams · standings · simulation · prediction · asianGames  (= 백엔드 패키지)
+lib/{도메인}/      games · teams · standings · simulation · prediction · asiangames  (= 백엔드 패키지)
   index.ts        입구. 밖에서는 이것만 import
   model/ schemas/ mocks/ api/ store/ hooks/ ui/   슬롯 — 고정 어휘, 필요한 것만
   __tests__/

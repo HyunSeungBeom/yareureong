@@ -21,7 +21,12 @@ class GameController(
     private val gameSearchService: GameSearchService,
 ) {
 
-    /** 전체 일정 또는 특정 날짜(?date=2026-07-20)의 경기 목록. */
+    /**
+     * 전체 일정 또는 특정 날짜(?date=2026-07-20)의 경기 목록.
+     *
+     * **KBO 전용이다.** 주소가 일반적이라 오해하기 쉬운데 국제대회는 `/api/asian-games` 가 따로 있다 —
+     * 대회마다 화면이 아예 다르고(예측 유무) 리그를 섞으면 순위·확률이 조용히 틀어진다.
+     */
     @GetMapping("/schedule")
     fun schedule(
         @RequestParam(required = false)
@@ -32,7 +37,7 @@ class GameController(
         else gameRepository.findByLeagueOrderByGameDateAscIdAsc(League.KBO)
 
     /**
-     * 조건 검색. 모든 파라미터 선택, 조건끼리는 AND. venue·result·opponent 는 team 관점.
+     * 조건 검색(**KBO 전용**). 모든 파라미터 선택, 조건끼리는 AND. venue·result·opponent 는 team 관점.
      * 예: /api/games?team=OB&opponent=LG&venue=HOME&result=WIN&from=2026-08-01&to=2026-08-31
      */
     @GetMapping("/games")

@@ -1,7 +1,8 @@
 "use client";
 
+import { dayLabel } from "@/lib/games";
 import { useAsianGames } from "../hooks/useAsianGames";
-import { dayLabel, pickDay } from "../model/summary";
+import { pickDay } from "../model/summary";
 import { AsianGameCard } from "./AsianGameCard";
 
 /**

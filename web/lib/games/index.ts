@@ -5,6 +5,7 @@
  */
 
 export * from "./model/types";
+export * from "./model/date";
 export * from "./model/filter";
 export * from "./model/urlFilter";
 export * from "./model/result";

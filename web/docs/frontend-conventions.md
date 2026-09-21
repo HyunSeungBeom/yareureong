@@ -16,7 +16,7 @@ web/
     standings/            │   (game · team · standings · simulation ·
     simulation/           │    prediction · asiangames)
     prediction/           │
-    asianGames/           ┘
+    asiangames/           ┘
       index.ts            입구(배럴). 밖에서는 이것만 import
       model/  api/  hooks/  store/  ui/   ← 슬롯 (필요한 것만)
       __tests__/
@@ -187,6 +187,7 @@ npm run verify   # type-check · test · lint — CI 도 이것을 돌린다
 | ARCH 006 | 코어 밖 `fetch`·axios · `api/` 슬롯 밖 `get` |
 | ARCH 007 | queryKey 리터럴 (인라인 · 변수로 뺀 것) |
 | ARCH 008 | 도메인 간 순환 의존 |
+| ARCH 009 | 도메인 폴더 이름의 대문자 (백엔드 패키지와 표기 불일치) |
 
 ### KNOWN — 예외를 올리는 법
 
