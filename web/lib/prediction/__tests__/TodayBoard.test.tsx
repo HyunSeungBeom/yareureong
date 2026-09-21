@@ -134,7 +134,7 @@ describe("TDY 004: 경기가 없는 날", () => {
     serve(200, []);
     renderWithQuery(<TodayBoard />);
 
-    expect(await screen.findByText(/오늘은 경기가 없어요/)).toBeInTheDocument();
+    expect(await screen.findByText(/오늘은 KBO 경기가 없어요/)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "예측" })).toBeInTheDocument();
     expect(screen.queryByRole("list")).not.toBeInTheDocument();
   });

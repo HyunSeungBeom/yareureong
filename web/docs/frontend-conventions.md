@@ -13,9 +13,10 @@ web/
     api/                  HTTP 코어 — fetch 는 여기서만
     games/                ┐
     teams/                │ 도메인. 백엔드 패키지와 1:1
-    standings/            │   (game · team · standings · simulation · prediction)
-    simulation/           │
-    prediction/           ┘
+    standings/            │   (game · team · standings · simulation ·
+    simulation/           │    prediction · asiangames)
+    prediction/           │
+    asianGames/           ┘
       index.ts            입구(배럴). 밖에서는 이것만 import
       model/  api/  hooks/  store/  ui/   ← 슬롯 (필요한 것만)
       __tests__/

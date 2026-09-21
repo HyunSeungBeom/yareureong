@@ -6,7 +6,9 @@ import { GameCard } from "./GameCard";
 import { PredictWidget } from "./PredictWidget";
 
 /**
- * 오늘 열리는 경기 + 예측. 경기 수는 날마다 2~5경기로 달라지므로 **개수에 맞춰 흐르는 그리드**다.
+ * 오늘 열리는 **KBO** 경기 + 예측. 국제대회는 예측 대상이 아니라 다른 섹션(`lib/asianGames`)이 맡는다 —
+ * 그래서 빈 상태 문구도 «KBO 경기» 라고 못 박는다. 아시안게임 기간엔 KBO 가 쉬는데
+ * 그냥 «경기가 없어요» 라고 하면 바로 위 카드들과 모순돼 보인다. 경기 수는 날마다 2~5경기로 달라지므로 **개수에 맞춰 흐르는 그리드**다.
  *
  * 경기가 없는 날(월요일·우천 취소·비시즌)에는 두 팀을 골라 비교하는 위젯을 대신 보여준다 —
  * 빈 화면보다 낫고, 그 위젯의 유일한 소비자이기도 하다.
@@ -35,7 +37,7 @@ export function TodayBoard({ date }: { date?: string }) {
   if (!data || data.length === 0) {
     return (
       <div>
-        <p className="mb-3 text-sm text-slate-500">오늘은 경기가 없어요. 두 팀을 골라 비교해 보세요.</p>
+        <p className="mb-3 text-sm text-slate-500">오늘은 KBO 경기가 없어요. 두 팀을 골라 비교해 보세요.</p>
         <PredictWidget />
       </div>
     );
