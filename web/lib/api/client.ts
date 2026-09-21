@@ -9,7 +9,16 @@
  * API 주소. 기본은 **빈 문자열 = 같은 사이트**다 — `next.config.ts` 의 프록시가 `/api/*` 를
  * 실제 API 서버로 넘긴다. 세션 쿠키가 1차 쿠키로 취급되려면 같은 사이트여야 한다.
  */
-export const API_BASE = process.env.NEXT_PUBLIC_API_BASE ?? "";
+const configuredBase = process.env.NEXT_PUBLIC_API_BASE ?? "";
+
+/**
+ * 절대 주소(`https://…`)만 API 주소로 인정한다.
+ *
+ * 그 외 값은 **경로로 붙어** `/무언가/api/...` 를 부르게 되어 전부 404 가 된다. 실제로 Vercel 의
+ * «민감값» 환경변수가 `[SENSITIVE]` 라는 문자열로 내려와 그 사고가 났다 — 조용히 깨지는 대신
+ * 같은 사이트 호출(기본값)로 되돌린다.
+ */
+export const API_BASE = /^https?:\/\//.test(configuredBase) ? configuredBase : "";
 
 /**
  * API 실패. 검증 실패(400)면 백엔드 ProblemDetail 의 `errors`(위반 사유 목록)를 담는다.

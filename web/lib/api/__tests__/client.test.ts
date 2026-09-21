@@ -54,3 +54,11 @@ describe("API 002: 검증 실패는 사유 목록을 담아 던진다", () => {
     await expect(get("/api/games")).rejects.toMatchObject({ status, errors: [] });
   });
 });
+
+describe("API 003: 이상한 API 주소 설정은 무시하고 같은 사이트로 부른다", () => {
+  it("절대 주소가 아니면 경로로 붙어 전부 404 가 된다 — 그럴 바엔 기본값(같은 사이트)이 낫다", () => {
+    /* Vercel 의 «민감값» 환경변수는 실제 값 대신 [SENSITIVE] 문자열로 내려온다(실제로 겪은 사고) */
+    expect(API_BASE).not.toContain("[SENSITIVE]");
+    expect(API_BASE === "" || /^https?:\/\//.test(API_BASE)).toBe(true);
+  });
+});

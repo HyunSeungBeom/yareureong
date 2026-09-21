@@ -188,7 +188,13 @@ jobs:
 
       # 레포 루트에서 실행한다. Vercel 프로젝트의 Root Directory 가 web 으로 설정돼 있다.
       - name: Pull Vercel project settings
-        run: npx --yes "$VERCEL_CLI" pull --yes --environment=production --scope "$VERCEL_SCOPE" --token="$VERCEL_TOKEN"
+        run: |
+          npx --yes "$VERCEL_CLI" pull --yes --environment=production --scope "$VERCEL_SCOPE" --token="$VERCEL_TOKEN"
+          # 프로젝트에 NEXT_PUBLIC_API_BASE 가 남아 있으면 빌드가 그 값을 API 주소로 박아
+          # 프록시를 건너뛴다. 게다가 «민감값» 으로 등록돼 있으면 실제 값 대신 [SENSITIVE] 라는
+          # 문자열이 내려와 /[SENSITIVE]/api/... 같은 주소를 부르게 된다(실제로 겪었다).
+          # 이 배포에서는 항상 같은 사이트로 부르므로 그 값을 걷어낸다.
+          sed -i '/^NEXT_PUBLIC_API_BASE=/d' .vercel/.env.production.local 2>/dev/null || true
 
       # NEXT_PUBLIC_* 는 빌드 시점에 번들에 박힌다 — 그래서 여기서 주입한다
       - name: Build
@@ -205,6 +211,10 @@ jobs:
         run: |
           if grep -rqF "$API_URL" .vercel/output/static/_next; then
             echo "::error::번들에 외부 API 주소가 박혀 있다 — NEXT_PUBLIC_API_BASE 를 비우고 프록시를 쓰게 한다"
+            exit 1
+          fi
+          if grep -rqF "[SENSITIVE]" .vercel/output/static/_next; then
+            echo "::error::번들에 [SENSITIVE] 가 박혔다 — Vercel 의 민감값 환경변수가 API 주소 자리에 들어갔다"
             exit 1
           fi
           grep -q "$API_URL" .vercel/output/config.json || {
